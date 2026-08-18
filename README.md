@@ -29,9 +29,12 @@ SHA-256 checksum without vendoring it in source control:
 
 ```dockerfile
 FROM kafbat/kafka-ui:v1.5.0
-ADD --checksum=sha256:49e9c05c474ab02aa47809fb26715fa90b6dfa168a7e414bf02206853fa0b194 \
+USER root
+RUN mkdir -p /opt/kafbat/serdes
+ADD --chmod=0644 --checksum=sha256:49e9c05c474ab02aa47809fb26715fa90b6dfa168a7e414bf02206853fa0b194 \
     https://packages.buildkite.com/buildkite/kafbat-otlp-trace-serde/files/kafbat-otlp-trace-serde-0.1.2.jar \
     /opt/kafbat/serdes/kafbat-otlp-trace-serde.jar
+USER kafkaui
 ```
 
 ## Kafbat configuration
