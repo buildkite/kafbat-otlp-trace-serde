@@ -20,7 +20,7 @@ import java.util.zip.GZIPInputStream;
 
 /** Deserializes raw or gzip-compressed OTLP trace export requests. */
 public final class OtlpTraceSerde implements Serde {
-  private static final int MAX_DECODED_BYTES = 64 * 1024 * 1024;
+  private static final int MAX_DECODED_BYTES = 8 * 1024 * 1024;
   private static final int COPY_BUFFER_BYTES = 8192;
   private static final JsonFormat.Printer JSON_PRINTER = JsonFormat.printer();
 
@@ -165,7 +165,7 @@ public final class OtlpTraceSerde implements Serde {
 
   private static IllegalArgumentException decodedSizeExceeded() {
     return new IllegalArgumentException(
-        "Decoded OTLP value exceeds the 64 MiB safety limit"
+        "Decoded OTLP value exceeds the 8 MiB safety limit"
     );
   }
 

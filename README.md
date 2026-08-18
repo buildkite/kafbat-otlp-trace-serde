@@ -7,7 +7,7 @@ The serde:
 - renders the protobuf as JSON in Kafbat;
 - decompresses values when `content_encoding`, `content-encoding`, or `Content-Encoding` is `gzip`;
 - falls back to gzip magic-byte detection when the header is absent;
-- limits decoded values to 64 MiB; and
+- matches the ingestion consumer's 8 MiB decoded-request limit; and
 - only supports value deserialization, not record production.
 
 ## Build

@@ -97,6 +97,28 @@ class OtlpTraceSerdeTest {
   }
 
   @Test
+  void rejectsRawValuesLargerThanTheIngestionLimit() {
+    IllegalArgumentException error = assertThrows(
+        IllegalArgumentException.class,
+        () -> deserialize(NO_HEADERS, new byte[8 * 1024 * 1024 + 1])
+    );
+
+    assertEquals("Decoded OTLP value exceeds the 8 MiB safety limit", error.getMessage());
+  }
+
+  @Test
+  void rejectsGzipValuesThatExpandBeyondTheIngestionLimit() throws Exception {
+    byte[] compressed = gzip(new byte[8 * 1024 * 1024 + 1]);
+
+    IllegalArgumentException error = assertThrows(
+        IllegalArgumentException.class,
+        () -> deserialize(headers("Content-Encoding", "gzip"), compressed)
+    );
+
+    assertEquals("Decoded OTLP value exceeds the 8 MiB safety limit", error.getMessage());
+  }
+
+  @Test
   void onlySupportsValueDeserialization() {
     assertTrue(serde.canDeserialize("topic", Serde.Target.VALUE));
     assertFalse(serde.canDeserialize("topic", Serde.Target.KEY));
