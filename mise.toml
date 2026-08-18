@@ -1,0 +1,15 @@
+[tools]
+java = "zulu-25.36.15.0"
+gradle = "9.2.0"
+
+[tasks.build]
+description = "Build the self-contained Kafbat plugin JAR"
+run = "./gradlew --no-daemon clean jar"
+
+[tasks.test]
+description = "Run the unit tests"
+run = "./gradlew --no-daemon test"
+
+[tasks.check]
+description = "Run tests and build the plugin JAR"
+run = "./gradlew --no-daemon clean check jar"
