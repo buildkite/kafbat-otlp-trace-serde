@@ -94,10 +94,6 @@ public final class OtlpTraceSerde implements Serde {
   }
 
   private static DecodedPayload decodePayload(RecordHeaders headers, byte[] data) {
-    if (data.length > MAX_DECODED_BYTES) {
-      throw decodedSizeExceeded();
-    }
-
     Optional<String> contentEncoding = contentEncoding(headers);
     if (contentEncoding.isPresent()
         && !contentEncoding.get().equals("gzip")
@@ -108,6 +104,9 @@ public final class OtlpTraceSerde implements Serde {
     }
 
     boolean gzip = contentEncoding.filter("gzip"::equals).isPresent() || hasGzipMagic(data);
+    if (!gzip && data.length > MAX_DECODED_BYTES) {
+      throw decodedSizeExceeded();
+    }
     byte[] decoded = gzip ? gunzip(data) : data;
     if (decoded.length > MAX_DECODED_BYTES) {
       throw decodedSizeExceeded();
