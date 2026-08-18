@@ -19,14 +19,14 @@ mise install
 mise run check
 ```
 
-The self-contained plugin is written to `build/libs/kafbat-otlp-trace-serde-0.1.0.jar`. It bundles the OTLP and protobuf runtime dependencies, but deliberately excludes Kafbat's serde API because Kafbat supplies that interface to the plugin classloader.
+The self-contained plugin is written to `build/libs/kafbat-otlp-trace-serde-0.1.1.jar`. It bundles the OTLP and protobuf runtime dependencies, but deliberately excludes Kafbat's serde API because Kafbat supplies that interface to the plugin classloader.
 
 ## Distribution
 
 Releases are published as minimal OCI images containing only the plugin JAR. This lets another image copy the JAR without vendoring it in source control:
 
 ```dockerfile
-FROM packages.buildkite.com/buildkite/kafbat-otlp-trace-serde/kafbat-otlp-trace-serde:0.1.0 AS otlp-trace-serde
+FROM packages.buildkite.com/buildkite/kafbat-otlp-trace-serde/kafbat-otlp-trace-serde:0.1.1 AS otlp-trace-serde
 FROM kafbat/kafka-ui:v1.5.0
 COPY --from=otlp-trace-serde /kafbat-otlp-trace-serde.jar /opt/kafbat/serdes/kafbat-otlp-trace-serde.jar
 ```
