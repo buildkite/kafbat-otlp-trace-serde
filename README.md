@@ -30,7 +30,7 @@ kafka:
   clusters:
     - name: example
       serde:
-        - name: OtlpTrace
+        - name: OTLP Trace
           className: com.buildkite.kafbat.serde.OtlpTraceSerde
           filePath: /opt/kafbat/serdes/kafbat-otlp-trace-serde.jar
           topicValuesPattern: ta-otlp-traces-inline
