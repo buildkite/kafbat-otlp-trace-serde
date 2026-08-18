@@ -6,13 +6,14 @@ env:
   MISE_TRUSTED_CONFIG_PATHS: /buildkite/builds
 
 steps:
-  - label: ":docker: Publish artifact image"
+  - label: ":package: Publish JAR"
     plugins:
       - mise#v1.1.2: ~
     commands:
       - mise run check
       - version="$$(./gradlew --no-daemon properties -q | awk '$$1 == "version:" { print $$2 }')"
       - test "$$BUILDKITE_TAG" = "v$$version"
-      - image="packages.buildkite.com/buildkite/kafbat-otlp-trace-serde/kafbat-otlp-trace-serde:$$version"
-      - buildkite-agent oidc request-token --audience "https://packages.buildkite.com/buildkite/kafbat-otlp-trace-serde" --lifetime 300 | docker login packages.buildkite.com/buildkite/kafbat-otlp-trace-serde --username buildkite --password-stdin
-      - docker build --platform linux/amd64,linux/arm64 --tag "$$image" --push .
+      - jar="build/libs/kafbat-otlp-trace-serde-$$version.jar"
+      - test -f "$$jar"
+      - token="$$(buildkite-agent oidc request-token --audience "https://packages.buildkite.com/buildkite/kafbat-otlp-trace-serde" --lifetime 300)"
+      - curl --fail --show-error --silent --request POST "https://api.buildkite.com/v2/packages/organizations/buildkite/registries/kafbat-otlp-trace-serde/packages" --header "Authorization: Bearer $$token" --form "file=@$$jar"
