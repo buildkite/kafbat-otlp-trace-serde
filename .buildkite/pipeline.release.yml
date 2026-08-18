@@ -16,4 +16,4 @@ steps:
       - jar="build/libs/kafbat-otlp-trace-serde-$$version.jar"
       - test -f "$$jar"
       - token="$$(buildkite-agent oidc request-token --audience "https://packages.buildkite.com/buildkite/kafbat-otlp-trace-serde" --lifetime 300)"
-      - curl --fail --show-error --silent --request POST "https://api.buildkite.com/v2/packages/organizations/buildkite/registries/kafbat-otlp-trace-serde/packages" --header "Authorization: Bearer $$token" --form "file=@$$jar"
+      - 'curl --fail --show-error --silent --request POST "https://api.buildkite.com/v2/packages/organizations/buildkite/registries/kafbat-otlp-trace-serde/packages" --header "Authorization: Bearer $$token" --form "file=@$$jar"'
