@@ -1,0 +1,14 @@
+agents:
+  queue: hosted
+
+env:
+  MISE_YES: "1"
+  MISE_TRUSTED_CONFIG_PATHS: /buildkite/builds
+
+steps:
+  - label: ":java: Test and build"
+    plugins:
+      - mise#v1.1.2: ~
+    command: mise run check
+    artifact_paths:
+      - build/libs/kafbat-otlp-trace-serde-*.jar
